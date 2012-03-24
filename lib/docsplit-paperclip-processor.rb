@@ -1,13 +1,14 @@
 require "paperclip"
 module Paperclip
   class DocsplitProcessor < Processor
-    attr_accessor :src, :options
+    attr_accessor :src, :options, :attachment
 
     def initialize(file, options = {}, attachment = nil)
       super
-      @src      = file
-      @options  = options
-      @basename = File.basename(@file.path, '.*')
+      @src        = file
+      @options    = options
+      @attachment = attachment
+      @basename   = File.basename(@file.path, '.*')
     end
   end
 
@@ -15,6 +16,7 @@ module Paperclip
     attr_accessor :options, :attachment
 
     def initialize(file, options = {}, attachment = nil)
+      super
       @options    = options
       @attachment = attachment
     end
@@ -28,14 +30,18 @@ module Paperclip
     def make
       begin
         src_path = File.expand_path(@src.path)
-        dst_path = Dir.tmpdir
-
-        Docsplit.extract_pdf(src_path, :output => dst_path)
+        dst_dir = Dir.tmpdir
+        dst_path = File.join(dst_dir, "#{@basename}.pdf")
+        unless File.extname(src_path) == '.pdf'
+          Docsplit.extract_pdf(src_path, :output => dst_dir)
+        else
+          dst_path = src_path
+        end
       rescue Exception => e
         Rails.logger.error e.message
-        raise PaperclipError, "There was an error converting #{basename} to pdf"
+        raise PaperclipError, "There was an error converting #{@basename} to pdf"
       end
-      File.open(File.join(dst_path, "#{@basename}.pdf"))
+      File.open(dst_path)
     end
   end
 
@@ -50,7 +56,7 @@ module Paperclip
         Docsplit.extract_images(src_path, options)
       rescue Exception => e
         Rails.logger.error e.message
-        raise PaperclipError, "There was an error extracting images from #{basename}"
+        raise PaperclipError, "There was an error extracting images from #{@basename}"
       end
       File.open(File.join(dst_path, "#{@basename}_#{pages.first}.#{@options[:format]}"))
     end
