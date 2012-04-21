@@ -32,10 +32,10 @@ module Paperclip
         src_path = File.expand_path(@src.path)
         dst_dir = Dir.tmpdir
         dst_path = File.join(dst_dir, "#{@basename}.pdf")
-        unless File.extname(src_path) == '.pdf'
-          Docsplit.extract_pdf(src_path, :output => dst_dir)
-        else
+        if File.extname(src_path) == '.pdf'
           dst_path = src_path
+        else
+          Docsplit.extract_pdf(src_path, :output => dst_dir)
         end
       rescue Exception => e
         Rails.logger.error e.message
