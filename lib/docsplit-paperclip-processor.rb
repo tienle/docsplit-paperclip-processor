@@ -30,7 +30,12 @@ module Paperclip
         src_path = File.expand_path(@src.path)
         dst_path = Dir.tmpdir
 
-        Docsplit.extract_pdf(src_path, :output => dst_path)
+        if /\.pdf$/.match(src_path) != nil # If the uploaded file is already a PDF, we can just pretend to process it as a pdf for consistency
+          dst_path = src_path
+        else
+          Docsplit.extract_pdf(src_path, :output => dst_path)        
+        end
+
       rescue Exception => e
         Rails.logger.error e.message
         raise PaperclipError, "There was an error converting #{basename} to pdf"
