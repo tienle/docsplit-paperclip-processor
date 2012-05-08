@@ -1,4 +1,6 @@
 require "paperclip"
+require "filemagic"
+
 module Paperclip
   class DocsplitProcessor < Processor
     attr_accessor :src, :options, :attachment
@@ -31,8 +33,10 @@ module Paperclip
       begin
         src_path = File.expand_path(@src.path)
         dst_dir = Dir.tmpdir
-        dst_path = File.join(dst_dir, "_#{@basename}.pdf")
-        if File.extname(src_path) == '.pdf'
+        dst_path = File.join(dst_dir, "#{@basename}.pdf")
+
+        if pdf_format?(src_path)
+          dst_path = File.join(dst_dir, "_#{@basename}.pdf")
           FileUtils.copy_file(src_path, dst_path)
         else
           Docsplit.extract_pdf(src_path, :output => dst_dir)
@@ -42,6 +46,13 @@ module Paperclip
         raise PaperclipError, "There was an error converting #{@basename} to pdf"
       end
       File.open(dst_path)
+    end
+
+    def pdf_format?(file)
+      file_magic = FileMagic.new
+      type = file_magic.file(file)
+      file_magic.close
+      type =~ /pdf/i
     end
   end
 
