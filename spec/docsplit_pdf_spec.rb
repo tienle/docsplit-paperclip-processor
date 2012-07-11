@@ -41,7 +41,7 @@ describe Paperclip::DocsplitPdf do
     
     lambda {
       make_output
-    }.should raise_error
+    }.should raise_error(Paperclip::Error)
     
     @file.close
   end
