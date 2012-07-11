@@ -31,11 +31,10 @@ module Paperclip
   class DocsplitPdf < DocsplitProcessor
     def make
       begin
-        src_path = File.expand_path(@src.path)
         dst_dir = Dir.tmpdir
         dst_path = File.join(dst_dir, "#{@basename}.pdf")
 
-        if pdf_format?(src_path)
+        if pdf_format?
           dst_path = File.join(dst_dir, "_#{@basename}.pdf")
           FileUtils.copy_file(src_path, dst_path)
         else
@@ -43,16 +42,20 @@ module Paperclip
         end
       rescue Exception => e
         Rails.logger.error e.message
-        raise PaperclipError, "There was an error converting #{@basename} to pdf"
+        raise Paperclip::Error, "There was an error converting #{@basename} to pdf"
       end
       File.open(dst_path)
     end
 
-    def pdf_format?(file)
+    def pdf_format?
       file_magic = FileMagic.new
-      type = file_magic.file(file)
+      type = file_magic.file(src_path)
       file_magic.close
       type =~ /pdf/i
+    end
+    
+    def src_path
+      File.expand_path(@src.path)
     end
   end
 
