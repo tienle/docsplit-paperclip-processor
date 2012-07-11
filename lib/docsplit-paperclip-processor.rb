@@ -43,7 +43,7 @@ module Paperclip
         end
       rescue Exception => e
         Rails.logger.error e.message
-        raise PaperclipError, "There was an error converting #{@basename} to pdf"
+        raise Paperclip::Error, "There was an error converting #{@basename} to pdf"
       end
       File.open(dst_path)
     end
