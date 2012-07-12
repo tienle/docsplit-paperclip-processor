@@ -18,6 +18,12 @@ describe Paperclip::DocsplitImage do
   end
   
   it "#make raises an error if the processing was unsuccessful" do
-    pending
+    @file = File.open("./fixtures/not_a_docx.docx")
+    
+    lambda {
+      Paperclip::DocsplitImage.new(@file).make
+    }.should raise_error(Paperclip::Error)
+    
+    @file.close
   end
 end
