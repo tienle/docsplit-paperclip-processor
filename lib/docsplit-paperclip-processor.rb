@@ -12,6 +12,10 @@ module Paperclip
       @attachment = attachment
       @basename   = File.basename(@file.path, '.*')
     end
+    
+    def src_path
+      File.expand_path(@src.path)
+    end
   end
 
   class DocsplitChaining < Processor
@@ -53,16 +57,11 @@ module Paperclip
       file_magic.close
       type =~ /pdf/i
     end
-    
-    def src_path
-      File.expand_path(@src.path)
-    end
   end
 
   class DocsplitImage < DocsplitProcessor
     def make
       begin
-        src_path = File.expand_path(@src.path)
         dst_path = Dir.tmpdir
         pages    = options[:pages] || [1]
         options  = @options.merge(:output => dst_path)
