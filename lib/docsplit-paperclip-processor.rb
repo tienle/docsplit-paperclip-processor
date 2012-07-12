@@ -67,7 +67,7 @@ module Paperclip
 
         Docsplit.extract_images(src_path, options)
       rescue Exception => e
-        raise PaperclipError, "There was an error extracting images from #{@basename}"
+        raise Paperclip::Error, "There was an error extracting images from #{@basename}"
       end
       File.open(File.join(dst_path, "#{@basename}_#{pages.first}.#{@options[:format]}"))
     end
