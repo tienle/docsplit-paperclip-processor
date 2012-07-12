@@ -45,7 +45,6 @@ module Paperclip
           Docsplit.extract_pdf(src_path, :output => dst_dir)
         end
       rescue Exception => e
-        Rails.logger.error e.message
         raise Paperclip::Error, "There was an error converting #{@basename} to pdf"
       end
       File.open(dst_path)
@@ -68,7 +67,6 @@ module Paperclip
 
         Docsplit.extract_images(src_path, options)
       rescue Exception => e
-        Rails.logger.error e.message
         raise PaperclipError, "There was an error extracting images from #{@basename}"
       end
       File.open(File.join(dst_path, "#{@basename}_#{pages.first}.#{@options[:format]}"))
