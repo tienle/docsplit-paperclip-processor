@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "paperclip", "~> 2.4"
   s.add_dependency 'ruby-filemagic'
+  s.add_dependency 'docsplit'
   s.add_development_dependency 'rspec'
 
   s.files         = `git ls-files`.split("\n")

@@ -12,6 +12,10 @@ module Paperclip
       @attachment = attachment
       @basename   = File.basename(@file.path, '.*')
     end
+    
+    def src_path
+      File.expand_path(@src.path)
+    end
   end
 
   class DocsplitChaining < Processor
@@ -41,7 +45,6 @@ module Paperclip
           Docsplit.extract_pdf(src_path, :output => dst_dir)
         end
       rescue Exception => e
-        Rails.logger.error e.message
         raise Paperclip::Error, "There was an error converting #{@basename} to pdf"
       end
       File.open(dst_path)
@@ -53,24 +56,18 @@ module Paperclip
       file_magic.close
       type =~ /pdf/i
     end
-    
-    def src_path
-      File.expand_path(@src.path)
-    end
   end
 
   class DocsplitImage < DocsplitProcessor
     def make
       begin
-        src_path = File.expand_path(@src.path)
         dst_path = Dir.tmpdir
         pages    = options[:pages] || [1]
         options  = @options.merge(:output => dst_path)
 
         Docsplit.extract_images(src_path, options)
       rescue Exception => e
-        Rails.logger.error e.message
-        raise PaperclipError, "There was an error extracting images from #{@basename}"
+        raise Paperclip::Error, "There was an error extracting images from #{@basename}"
       end
       File.open(File.join(dst_path, "#{@basename}_#{pages.first}.#{@options[:format]}"))
     end
