@@ -1,0 +1,14 @@
+New in 0.2.0:
+
+API CHANGE: Rails.logger no longer called 
+Bug Fix: Was calling PaperclipError, now calls Paperclip::Error
+Test Coverage: Specs added for DocsplitProcessor, DocsplitPdf, DocsplitImage.
+Feature: Added docsplit as a dependency
+Feature: Added rspec as a development dependency
+
+New in 0.1.2:
+Feature: Using FileMagic to determine MIME type
+
+New in 0.1.1:
+Feature: Passing PDF on if PDF conversion is attempted on a PDF
+Feature: Added Docsplit.extract_image processor
