@@ -37,7 +37,8 @@ describe Paperclip::DocsplitPdf do
   end
 
   it "raises an error if PDF conversion was unsuccessful" do
-    @file = File.open("./fixtures/not_a_docx.docx")
+    @file = File.open("./fixtures/test.bin")
+    Dir.stub!(:tmpdir).and_return(:raise)
     
     lambda {
       make_output
