@@ -79,5 +79,27 @@ module Paperclip
   end
 
   class DocsplitExtractText < DocsplitProcessor
+    def make
+      begin
+        @dst_path = Dir.tmpdir
+        @pages    = @options[:pages] || [1]
+        @options  = @options.merge(:output => @dst_path)
+
+        Docsplit.extract_text(src_path, @options)
+      rescue Exception => e
+        raise Paperclip::Error, "There was an error extracting text from #{@basename}"
+      end
+
+      full_text = String.new
+      destination_file.each do |line|
+        full_text += line
+      end
+
+      return full_text
+    end
+
+    def destination_file
+      File.open(File.join(@dst_path, "#{@basename}.txt"))
+    end
   end
 end
