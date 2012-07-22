@@ -72,4 +72,7 @@ module Paperclip
       File.open(File.join(dst_path, "#{@basename}_#{pages.first}.#{@options[:format]}"))
     end
   end
+
+  class DocsplitExtractText < DocsplitProcessor
+  end
 end
