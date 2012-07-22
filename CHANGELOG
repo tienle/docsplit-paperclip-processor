@@ -1,5 +1,7 @@
-New in 0.2.0:
+New in 0.2.1:
+Feature: Added Paperclip::DocsplitText for text extraction
 
+New in 0.2.0:
 API CHANGE: Rails.logger no longer called 
 Bug Fix: Was calling PaperclipError, now calls Paperclip::Error
 Test Coverage: Specs added for DocsplitProcessor, DocsplitPdf, DocsplitImage.
