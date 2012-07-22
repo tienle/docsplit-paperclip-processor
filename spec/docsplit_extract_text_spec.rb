@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Paperclip::DocsplitExtractText do
+describe Paperclip::DocsplitText do
   before(:all) do
     @file = File.open("./fixtures/word_xml.docx")
     @options = {}
-    @processor = Paperclip::DocsplitExtractText.new(File.open("./fixtures/word_xml.docx"), @options)
+    @processor = Paperclip::DocsplitText.new(File.open("./fixtures/word_xml.docx"), @options)
   end
 
   after(:all) do

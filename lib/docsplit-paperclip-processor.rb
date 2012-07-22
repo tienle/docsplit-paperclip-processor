@@ -78,7 +78,7 @@ module Paperclip
     end
   end
 
-  class DocsplitExtractText < DocsplitProcessor
+  class DocsplitText < DocsplitProcessor
     def make
       begin
         @dst_path = Dir.tmpdir
