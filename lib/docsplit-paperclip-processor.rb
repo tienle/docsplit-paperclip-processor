@@ -91,7 +91,14 @@ module Paperclip
       end
 
       if @options[:full_text_column]
-        @attachment.instance.update_attributes({@options[:full_text_column] => full_text})
+        # Bypassing callbacks to save full text. See Paperclip issue #671:
+        # https://github.com/thoughtbot/paperclip/issues/671
+        ar_model = @attachment.instance
+        ar_model[@options[:full_text_column]] = full_text
+        ar_model.run_callbacks(:save) { false }
+
+        # This would be the preferred method of saving this text.
+        # @attachment.instance.update_attribute(@options[:full_text_column], full_text)
       end
 
       destination_file
