@@ -1,1 +1,1 @@
---color --fail-fast --order random -f d
+--color --order random -f d
