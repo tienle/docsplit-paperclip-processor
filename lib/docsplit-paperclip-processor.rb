@@ -90,16 +90,25 @@ module Paperclip
         raise Paperclip::Error, "There was an error extracting text from #{@basename}"
       end
 
-      full_text = String.new
-      destination_file.each do |line|
-        full_text += line
+      if @options[:full_text_column]
+        @attachment.instance.update_attributes({@options[:full_text_column] => full_text})
       end
 
-      return full_text
+      destination_file
     end
 
     def destination_file
       File.open(File.join(@dst_path, "#{@basename}.txt"))
+    end
+
+    def full_text
+      full_text = String.new
+
+      destination_file.each do |line|
+        full_text += line
+      end
+
+      full_text
     end
   end
 end
