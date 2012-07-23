@@ -21,14 +21,37 @@ describe Paperclip::DocsplitText do
       @processor.make
     end
     
-    it "#make returns the full text of the document" do
-      @processor.make.should eq("This is a test document.\n\n\f")
+    it "#make returns the text tempfile created by Docsplit" do
+      result = @processor.make
+
+      text = String.new
+      result.each do |line|
+        text += line
+      end
+
+      text.should eq("This is a test document.\n\n\f")
     end
   end
 
   context "with a destination column for extracted text" do
+    before(:all) do
+      @options = {:full_text_column => :document_full_text}
+      @doc = Document.new()
+    end
+
+    after(:all) do
+      Dir.entries("./spec/tmp/*").each do |tempfile|
+        File.delete(File.join("./spec/tmp/*", tempfile))
+      end
+    end
+
     it "#make stores the full text in the specified field" do
-      pending
+      @doc.original = @file
+      @doc.save!
+
+      @doc.reload
+
+      @doc.original_full_text.should eq("This is a test document.\n\n\f")
     end
   end
 

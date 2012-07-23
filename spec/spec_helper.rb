@@ -22,5 +22,12 @@ load(File.join(File.dirname(__FILE__), 'schema.rb'))
 Paperclip::Railtie.insert
 
 class Document < ActiveRecord::Base
-	has_attached_file :original
+	has_attached_file :original,
+		:storage => :filesystem,
+    	:path => "./spec/tmp/:id.:extension",
+    	:url => "/spec/tmp/:id.:extension",
+    	:styles => {
+    		:text => {:full_text_column => :original_full_text}
+    	},
+    	:processors => [:docsplit_text]
 end
