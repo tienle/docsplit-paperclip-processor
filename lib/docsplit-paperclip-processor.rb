@@ -1,3 +1,4 @@
+require "docsplit"
 require "paperclip"
 require "filemagic"
 
