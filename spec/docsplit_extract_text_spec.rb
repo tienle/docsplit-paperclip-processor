@@ -40,9 +40,7 @@ describe Paperclip::DocsplitText do
     end
 
     after(:all) do
-      Dir.entries("./spec/tmp/*").each do |tempfile|
-        File.delete(File.join("./spec/tmp/*", tempfile))
-      end
+      FileUtils.rm_rf("./spec/tmp", secure: true)
     end
 
     it "#make stores the full text in the specified field" do
