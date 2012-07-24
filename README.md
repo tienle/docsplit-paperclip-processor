@@ -7,6 +7,7 @@ These include the Microsoft Office formats: doc, docx, ppt, xls and so on, as we
 
 * [Paperclip][0]
 * [Docsplit][1]
+* [FileMagic][2]
 
 ## Installation ##
 
@@ -40,7 +41,25 @@ Use it as you would any other Paperclip processor. For example, in your model:
 
 which will convert your document into pdf.
 
-### Extract information (text, metadata) and thumbnail ###
+### Extract text ###
+
+WARNING: This feature is in alpha.
+
+    class Document < ActiveRecord::Base
+
+      has_attached_file :file,
+                        :styles => {
+                          :text => {
+                            :processors => [:docsplit_text],
+                            :full_text_column => :file_full_text
+                          }
+                        }
+
+    end
+
+will extract the text from the file uploaded, and desposit the full text of the file into the column 'file_full_text'.
+
+### Extract metadata and thumbnail ###
 
 Will be include in the next releases.
 
