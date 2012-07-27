@@ -1,3 +1,7 @@
+New in 0.2.2:
+Feature: Added ability to save extracted text back to an ActiveRecord model's field
+Documentation: Updated docs for extracting text and listed dependencies
+
 New in 0.2.1:
 Feature: Added Paperclip::DocsplitText for text extraction
 
